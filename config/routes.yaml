@@ -1,3 +1,15 @@
 homepage:
   path: /
   controller: App\Controller\HomeController::index
+
+register:
+  path: /register
+  controller: App\Controller\RegistrationController::register
+
+app_verify_email:
+  path: /verify/email
+  controller: App\Controller\RegistrationController::app_verify_email
+
+login:
+  path: /login
+  controller: App\Controller\SecurityController::login
