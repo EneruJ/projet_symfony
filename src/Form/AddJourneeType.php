@@ -12,11 +12,12 @@ class AddJourneeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre')        
+            ->add('titre')
             ->add('description')
             ->add('date')
             ->add('lieu')
             ->add('nb_participants_max')
+            ->add('niveau')
             ->add('organisateur')
         ;
     }
