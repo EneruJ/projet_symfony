@@ -18,7 +18,6 @@ class AddJourneeType extends AbstractType
             ->add('lieu')
             ->add('nb_participants_max')
             ->add('niveau')
-            ->add('organisateur')
         ;
     }
 

@@ -13,3 +13,11 @@ app_verify_email:
 login:
   path: /login
   controller: App\Controller\SecurityController::login
+
+journee:
+  path: /journee
+  controller: App\Controller\JourneeController::index
+
+add_journee:
+  path: /journee/add
+  controller: App\Controller\JourneeController::add
