@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -43,6 +45,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
+
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Journee::class)]
+    private Collection $journees;
+
+    public function __construct()
+    {
+        $this->journees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -170,6 +180,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Journee>
+     */
+    public function getJournees(): Collection
+    {
+        return $this->journees;
+    }
+
+    public function addJournee(Journee $journee): self
+    {
+        if (!$this->journees->contains($journee)) {
+            $this->journees->add($journee);
+            $journee->setOrganisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJournee(Journee $journee): self
+    {
+        if ($this->journees->removeElement($journee)) {
+            // set the owning side to null (unless already changed)
+            if ($journee->getOrganisateur() === $this) {
+                $journee->setOrganisateur(null);
+            }
+        }
 
         return $this;
     }
