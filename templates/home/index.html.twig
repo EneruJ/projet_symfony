@@ -7,7 +7,11 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
-
+<nav class="navbar navbar-dark bg-dark">
+  <!-- Navbar content -->
+  <a  class="btn btn-outline-warning my-2 my-sm-0" href="/logout"> deconnexion </a>
+  <button class="btn btn-outline-success my-2 my-sm-0" style='margin-left: auto;' >Crée une journée</button>
+</nav>
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
@@ -18,11 +22,22 @@
         <li>Your template at <code><a href="{{ 'E:/H3 Hitema/Symfony/projet_synf/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
     </ul>
 </div>
+
+{{ user.niveau }}
+<div class="col-sm-12">
 {% for journee in list %}
-    <div style='display:flex;' >
-        {{ journee.titre }}
-        <div style='display:flex;'> pour les niveaux : {{journee.niveau}} </div>
-        <div style='display:flex;'> {{ journee.description}} </div>
+
+    <div class="card w-50" >
+        <div class="card-body"> 
+            <div class="row"> 
+                <div><h5 class="card-title"> {{ journee.titre }} </h5> </div>
+                <div style='margin-left: auto;'> pour les niveaux : {{journee.niveau}} </div>
+            </div>
+            <p class="card-text">{{ journee.description}}</p>
+            <a href="#" class="btn btn-primary">Participer</a>
+        </div>
     </div>
-    {% endfor %}
+{% endfor %}
+
+</div>
 {% endblock %}
