@@ -47,7 +47,7 @@ class RegistrationController extends AbstractController
             if($ptscomp >= 11 and $ptscomp <= 20) {
                 $user->setNiveau("Argent");
             }
-            if($ptscomp >= 21 and $ptscomp <= 30) {
+            if($ptscomp >= 21) {
                 $user->setNiveau("Or");
             }
             $entityManager->persist($user);
