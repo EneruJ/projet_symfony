@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\JourneeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,10 +25,6 @@ class Journee
     #[ORM\Column]
     private ?int $nb_participants_max = null;
 
-    #[ORM\ManyToOne(inversedBy: 'journees')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $organisateur = null;
-
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
@@ -36,8 +34,13 @@ class Journee
     #[ORM\Column(length: 255)]
     private ?string $niveau = null;
 
-    #[ORM\OneToOne(mappedBy: 'journee', cascade: ['persist', 'remove'])]
-    private ?Participants $participants = null;
+    #[ORM\OneToMany(mappedBy: 'journee', targetEntity: UserJournee::class)]
+    private Collection $userJournees;
+
+    public function __construct()
+    {
+        $this->userJournees = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -80,18 +83,6 @@ class Journee
         return $this;
     }
 
-    public function getOrganisateur(): ?User
-    {
-        return $this->organisateur;
-    }
-
-    public function setOrganisateur(?User $organisateur): self
-    {
-        $this->organisateur = $organisateur;
-
-        return $this;
-    }
-
     public function getTitre(): ?string
     {
         return $this->titre;
@@ -128,20 +119,35 @@ class Journee
         return $this;
     }
 
-    public function getParticipants(): ?Participants
+    /**
+     * @return Collection<int, UserJournee>
+     */
+    public function getUserJournees(): Collection
     {
-        return $this->participants;
+        return $this->userJournees;
     }
 
-    public function setParticipants(Participants $participants): self
+    public function addUserJournee(UserJournee $userJournee): self
     {
-        // set the owning side of the relation if necessary
-        if ($participants->getJournee() !== $this) {
-            $participants->setJournee($this);
+        if (!$this->userJournees->contains($userJournee)) {
+            $this->userJournees->add($userJournee);
+            $userJournee->setJournee($this);
         }
-
-        $this->participants = $participants;
 
         return $this;
     }
+
+    public function removeUserJournee(UserJournee $userJournee): self
+    {
+        if ($this->userJournees->removeElement($userJournee)) {
+            // set the owning side to null (unless already changed)
+            if ($userJournee->getJournee() === $this) {
+                $userJournee->setJournee(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

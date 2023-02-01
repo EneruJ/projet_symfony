@@ -46,17 +46,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Journee::class)]
-    private Collection $journees;
-
-    #[ORM\ManyToMany(targetEntity: Participants::class, mappedBy: 'participant')]
-    private Collection $participations;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserJournee::class)]
+    private Collection $userJournees;
 
     public function __construct()
     {
-        $this->journees = new ArrayCollection();
-        $this->participations = new ArrayCollection();
+        $this->userJournees = new ArrayCollection();
     }
+
+
+
+  
 
     public function getId(): ?int
     {
@@ -189,59 +189,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Journee>
+     * @return Collection<int, UserJournee>
      */
-    public function getJournees(): Collection
+    public function getUserJournees(): Collection
     {
-        return $this->journees;
+        return $this->userJournees;
     }
 
-    public function addJournee(Journee $journee): self
+    public function addUserJournee(UserJournee $userJournee): self
     {
-        if (!$this->journees->contains($journee)) {
-            $this->journees->add($journee);
-            $journee->setOrganisateur($this);
+        if (!$this->userJournees->contains($userJournee)) {
+            $this->userJournees->add($userJournee);
+            $userJournee->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeJournee(Journee $journee): self
+    public function removeUserJournee(UserJournee $userJournee): self
     {
-        if ($this->journees->removeElement($journee)) {
+        if ($this->userJournees->removeElement($userJournee)) {
             // set the owning side to null (unless already changed)
-            if ($journee->getOrganisateur() === $this) {
-                $journee->setOrganisateur(null);
+            if ($userJournee->getUser() === $this) {
+                $userJournee->setUser(null);
             }
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Participants>
-     */
-    public function getParticipations(): Collection
-    {
-        return $this->participations;
-    }
 
-    public function addParticipation(Participants $participation): self
-    {
-        if (!$this->participations->contains($participation)) {
-            $this->participations->add($participation);
-            $participation->addParticipant($this);
-        }
 
-        return $this;
-    }
 
-    public function removeParticipation(Participants $participation): self
-    {
-        if ($this->participations->removeElement($participation)) {
-            $participation->removeParticipant($this);
-        }
-
-        return $this;
-    }
 }
