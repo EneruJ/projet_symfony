@@ -37,6 +37,10 @@ class Journee
     #[ORM\OneToMany(mappedBy: 'journee', targetEntity: UserJournee::class)]
     private Collection $userJournees;
 
+    #[ORM\ManyToOne(inversedBy: 'journees')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $organisateur = null;
+
     public function __construct()
     {
         $this->userJournees = new ArrayCollection();
@@ -145,6 +149,18 @@ class Journee
                 $userJournee->setJournee(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOrganisateur(): ?User
+    {
+        return $this->organisateur;
+    }
+
+    public function setOrganisateur(?User $organisateur): self
+    {
+        $this->organisateur = $organisateur;
 
         return $this;
     }

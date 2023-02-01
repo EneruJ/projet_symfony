@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Journee;
 use App\Entity\User;
-use App\Entity\Participants;
+use App\Entity\UserJournee;
 use Doctrine\Persistence\ManagerRegistry;
 class HomeController extends AbstractController
 {
@@ -19,7 +19,7 @@ class HomeController extends AbstractController
         $in_list = array();
         foreach ($list as $key => $value) {
             $this_id = $list[$key]->getId();
-            $is_in = $doctrine->getRepository(Participants::class)->findBy(array('journee' => $list[$key]) );
+            $is_in = $doctrine->getRepository(UserJournee::class)->findBy(array('journee' => $list[$key]) );
             $ok = 0;
             foreach ($is_in as $key2 => $value2) {
                 if ($is_in[$key2]->getId()== $user_id) { 

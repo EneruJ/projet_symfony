@@ -49,9 +49,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserJournee::class)]
     private Collection $userJournees;
 
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Journee::class)]
+    private Collection $journees;
+
     public function __construct()
     {
         $this->userJournees = new ArrayCollection();
+        $this->journees = new ArrayCollection();
     }
 
 
@@ -212,6 +216,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userJournee->getUser() === $this) {
                 $userJournee->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Journee>
+     */
+    public function getJournees(): Collection
+    {
+        return $this->journees;
+    }
+
+    public function addJournee(Journee $journee): self
+    {
+        if (!$this->journees->contains($journee)) {
+            $this->journees->add($journee);
+            $journee->setOrganisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJournee(Journee $journee): self
+    {
+        if ($this->journees->removeElement($journee)) {
+            // set the owning side to null (unless already changed)
+            if ($journee->getOrganisateur() === $this) {
+                $journee->setOrganisateur(null);
             }
         }
 
