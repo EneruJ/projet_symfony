@@ -32,6 +32,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -39,7 +40,16 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+            $ptscomp = $user->getPtsComp();
+            if($ptscomp >= 0 and $ptscomp <= 10) {
+                $user->setNiveau("Bronze");
+            }
+            if($ptscomp >= 11 and $ptscomp <= 20) {
+                $user->setNiveau("Argent");
+            }
+            if($ptscomp >= 21 and $ptscomp <= 30) {
+                $user->setNiveau("Or");
+            }
             $entityManager->persist($user);
             $entityManager->flush();
 

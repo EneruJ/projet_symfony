@@ -31,11 +31,20 @@ class JourneeController extends AbstractController
         if($journeeForm->isSubmitted() && $journeeForm->isValid()){
             $user = $this->getUser();
             $journee->setOrganisateur($user);
-            $em->persist($journee); 
+            $em->persist($journee);
             $em->flush();
         }
 
-        return $this->redirectToRoute('homepage');
+        return $this->renderForm('journee/add.html.twig', compact('journeeForm'));
+        }
     }
-}
+
+    public function checkParticipants(ManagerRegistry $doctrine, Journee $journee): Response{
+        $idjournee = $journee->getId();
+        $list = $doctrine->getRepository(Participants::class)->findByOne(['journee_id' => $idjournee]);
+        return $this->render('journee/index.html.twig', [
+            'controller_name' => 'JourneeController',
+            'list' => $list,
+        ]);
+    }
 }

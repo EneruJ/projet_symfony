@@ -49,9 +49,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Journee::class)]
     private Collection $journees;
 
+    #[ORM\ManyToMany(targetEntity: Participants::class, mappedBy: 'participant')]
+    private Collection $participations;
+
     public function __construct()
     {
         $this->journees = new ArrayCollection();
+        $this->participations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -209,6 +213,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($journee->getOrganisateur() === $this) {
                 $journee->setOrganisateur(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participants>
+     */
+    public function getParticipations(): Collection
+    {
+        return $this->participations;
+    }
+
+    public function addParticipation(Participants $participation): self
+    {
+        if (!$this->participations->contains($participation)) {
+            $this->participations->add($participation);
+            $participation->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipation(Participants $participation): self
+    {
+        if ($this->participations->removeElement($participation)) {
+            $participation->removeParticipant($this);
         }
 
         return $this;

@@ -36,6 +36,9 @@ class Journee
     #[ORM\Column(length: 255)]
     private ?string $niveau = null;
 
+    #[ORM\OneToOne(mappedBy: 'journee', cascade: ['persist', 'remove'])]
+    private ?Participants $participants = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +124,23 @@ class Journee
     public function setNiveau(string $niveau): self
     {
         $this->niveau = $niveau;
+
+        return $this;
+    }
+
+    public function getParticipants(): ?Participants
+    {
+        return $this->participants;
+    }
+
+    public function setParticipants(Participants $participants): self
+    {
+        // set the owning side of the relation if necessary
+        if ($participants->getJournee() !== $this) {
+            $participants->setJournee($this);
+        }
+
+        $this->participants = $participants;
 
         return $this;
     }

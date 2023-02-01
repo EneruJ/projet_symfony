@@ -46,7 +46,6 @@ class RegistrationFormType extends AbstractType
             ->add('nom')
             ->add('prenom')
             ->add('pts_comp')
-            ->add('niveau')
         ;
     }
 

@@ -37,6 +37,7 @@
 {% if user %}
     <ul>
         {{ user.ptscomp }}
+        {{ user.niveau }}
     </ul>
 {% endif %}
 <div class="col-sm-12">
@@ -50,13 +51,13 @@
             </div>
             <p class="card-text">{{ journee.description}}</p>
             {% if user %}
-                {% if journee.niveau == 'or' and user.ptscomp >= 30  %}
+                {% if journee.niveau == 'Or' and user.ptscomp >= 30  %}
                     <a href="#" class="btn btn-primary">Participer</a>
                 {% endif %}
-                {% if journee.niveau == 'argent' and user.ptscomp >= 10  %}
+                {% if journee.niveau == 'Argent' and user.ptscomp >= 10  %}
                     <a href="#" class="btn btn-primary">Participer</a>
                 {% endif %}
-                {% if journee.niveau == 'bronze' and user.ptscomp >= 0  %}
+                {% if journee.niveau == 'Bronze' and user.ptscomp >= 0  %}
                     <a href="#" class="btn btn-primary">Participer</a>
                 {% endif %}
             {% endif %}
