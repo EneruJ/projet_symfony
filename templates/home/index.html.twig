@@ -50,16 +50,20 @@
                 <div style='margin-left: auto;'> journée {{journee.niveau}} </div>
             </div>
             <p class="card-text">{{ journee.description}}</p>
-            {{in_list[journee.id]}}
             {% if user %}
-                {% if journee.niveau == 'Or' and user.ptscomp >= 30  %}
-                    <a href={{ path('add_participant', {'journee': journee}) }} class="btn btn-primary">Participer</a>
+                {% if in_list[journee.id] == 0 %}
+                    {% if journee.niveau == 'Or' and user.ptscomp >= 30  %}
+                        <a href={{ path('add_participant', {'journee': journee.id}) }} class="btn btn-primary">Participer</a>
+                    {% endif %}
+                    {% if journee.niveau == 'Argent' and user.ptscomp >= 10  %}
+                        <a href={{ path('add_participant', {'journee': journee.id}) }}  class="btn btn-primary">Participer</a>
+                    {% endif %}
+                    {% if journee.niveau == 'Bronze' and user.ptscomp >= 0  %}
+                        <a href={{ path('add_participant', {'journee': journee.id}) }}  class="btn btn-primary">Participer</a>
+                    {% endif %}
                 {% endif %}
-                {% if journee.niveau == 'Argent' and user.ptscomp >= 10  %}
-                    <a href={{ path('add_participant', {'journee': journee}) }}  class="btn btn-primary">Participer</a>
-                {% endif %}
-                {% if journee.niveau == 'Bronze' and user.ptscomp >= 0  %}
-                    <a href={{ path('add_participant', {'journee': journee.id}) }}  class="btn btn-primary">Participer</a>
+                {% if in_list[journee.id] == 1 %}
+                    <a href="#" class="btn btn-dark">Déjà inscrit</a>
                 {% endif %}
             {% endif %}
         </div>

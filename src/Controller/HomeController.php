@@ -15,20 +15,26 @@ class HomeController extends AbstractController
     {
         $list = $doctrine->getRepository(Journee::class)->findAll();
         $user = $this->getUser();
-        $user_id = $user->getId();
         $in_list = array();
-        foreach ($list as $key => $value) {
-            $this_id = $list[$key]->getId();
-            $is_in = $doctrine->getRepository(UserJournee::class)->findBy(array('journee' => $list[$key]) );
-            $ok = 0;
-            foreach ($is_in as $key2 => $value2) {
-                if ($is_in[$key2]->getId()== $user_id) { 
-                    $ok = 1;
+        if ($user) {
+            $user_id = $user->getId();
+            
+            foreach ($list as $key => $value) {
+                $this_id = $list[$key]->getId();
+                $is_in = $doctrine->getRepository(UserJournee::class)->findBy(array('journee' => $list[$key]));
+                if ($is_in) {
+                    $ok = 0;
+                    foreach ($is_in as $key2 => $value2) {
+                        if ($is_in[$key2]->getUser() == $user) { 
+                            $ok = 1;
+                        }
+                    } 
+                    $in_list[$this_id] = $ok;
                 }
+                
             }
-            $in_list[$this_id] = $ok;
-
         }
+        
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'list' => $list,

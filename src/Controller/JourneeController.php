@@ -50,9 +50,9 @@ class JourneeController extends AbstractController
     public function addParticipant(ManagerRegistry $doctrine, EntityManagerInterface $em, Journee $journee): Response{
         $user = $this->getUser();
         $list = $doctrine->getRepository(UserJournee::class)->findOneBy(array('journee' => $journee));
-        $list->addParticipant($user);
+        $list->setUser($user);
         $em->flush();
-        return $this->render('journee/index.html.twig', [
+        return $this->render('/', [
             'controller_name' => 'JourneeController',
             'list' => $list,
         ]);
