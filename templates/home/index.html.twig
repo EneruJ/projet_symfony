@@ -7,10 +7,21 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-dark bg-dark" style='justify-content:flex-start;'>
   <!-- Navbar content -->
-  <a  class="btn btn-outline-warning my-2 my-sm-0" href="/logout"> deconnexion </a>
-  <button class="btn btn-outline-success my-2 my-sm-0" style='margin-left: auto;' >Crée une journée</button>
+    {% if user %}
+        <a  class="btn btn-outline-warning my-2 my-sm-0" href="/logout"> Déconnexion </a>
+        <a  class="btn btn-outline-primary my-2 my-sm-0"  style='margin-left: 10px;' href="/login"> Mes journée </a>
+        <p style='color:white;margin-left: 10px;'> Bonjour {{user.nom}} {{user.prenom}} ! </p> 
+        {% if user.ptscomp >= 30 %}
+            <a class="btn btn-outline-success my-2 my-sm-0" href="/journee/add" style='margin-left: auto;' >Crée une journée</a>
+        {% endif %}
+    {% endif %}
+    {% if user == false %}
+        <a  class="btn btn-outline-primary my-2 my-sm-0" href="/login"> Connexion </a>
+        <a class="btn btn-outline-primary my-2 my-sm-0" href="/register"> Crée un compte</a>
+    {% endif %}
+
 </nav>
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
@@ -23,7 +34,11 @@
     </ul>
 </div>
 
-{{ user.niveau }}
+{% if user %}
+    <ul>
+        {{ user.ptscomp }}
+    </ul>
+{% endif %}
 <div class="col-sm-12">
 {% for journee in list %}
 
@@ -31,10 +46,20 @@
         <div class="card-body"> 
             <div class="row"> 
                 <div><h5 class="card-title"> {{ journee.titre }} </h5> </div>
-                <div style='margin-left: auto;'> pour les niveaux : {{journee.niveau}} </div>
+                <div style='margin-left: auto;'> journée {{journee.niveau}} </div>
             </div>
             <p class="card-text">{{ journee.description}}</p>
-            <a href="#" class="btn btn-primary">Participer</a>
+            {% if user %}
+                {% if journee.niveau == 'or' and user.ptscomp >= 30  %}
+                    <a href="#" class="btn btn-primary">Participer</a>
+                {% endif %}
+                {% if journee.niveau == 'argent' and user.ptscomp >= 10  %}
+                    <a href="#" class="btn btn-primary">Participer</a>
+                {% endif %}
+                {% if journee.niveau == 'bronze' and user.ptscomp >= 0  %}
+                    <a href="#" class="btn btn-primary">Participer</a>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 {% endfor %}

@@ -31,11 +31,11 @@ class JourneeController extends AbstractController
         if($journeeForm->isSubmitted() && $journeeForm->isValid()){
             $user = $this->getUser();
             $journee->setOrganisateur($user);
-            $em->persist($journee);
+            $em->persist($journee); 
             $em->flush();
         }
 
-        return $this->renderForm('journee/add.html.twig', compact('journeeForm'));
+        return $this->redirectToRoute('homepage');
     }
 }
 }

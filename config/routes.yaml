@@ -21,3 +21,7 @@ journee:
 add_journee:
   path: /journee/add
   controller: App\Controller\JourneeController::add
+
+logout:
+  path: /logout
+  controller: App\Controller\SecurityController::logout
