@@ -22,6 +22,10 @@ add_journee:
   path: /journee/add
   controller: App\Controller\JourneeController::add
 
+add_participant:
+  path: /journee/add/participant/{journee}
+  controller: App\Controller\JourneeController::addParticipant
+
 logout:
   path: /logout
   controller: App\Controller\SecurityController::logout

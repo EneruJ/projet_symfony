@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Journee;
+use App\Entity\Participants;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\AddJourneeType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +33,10 @@ class JourneeController extends AbstractController
         if($journeeForm->isSubmitted() && $journeeForm->isValid()){
             $user = $this->getUser();
             $journee->setOrganisateur($user);
+            $liste = new Participants();
+            $liste->setJournee($journee);
             $em->persist($journee);
+            $em->persist($liste);
             $em->flush();
         }
 
@@ -39,9 +44,20 @@ class JourneeController extends AbstractController
         }
     }
 
+    public function addParticipant(ManagerRegistry $doctrine, EntityManagerInterface $em, Journee $journee): Response{
+        $user = $this->getUser();
+        $list = $doctrine->getRepository(Participants::class)->findOneBy(array('journee' => $journee));
+        $list->addParticipant($user);
+        $em->flush();
+        return $this->render('journee/index.html.twig', [
+            'controller_name' => 'JourneeController',
+            'list' => $list,
+        ]);
+    }
+
     public function checkParticipants(ManagerRegistry $doctrine, Journee $journee): Response{
         $idjournee = $journee->getId();
-        $list = $doctrine->getRepository(Participants::class)->findByOne(['journee_id' => $idjournee]);
+        $list = $doctrine->getRepository(Participants::class)->findOneBy(array('journee' => $journee));
         return $this->render('journee/index.html.twig', [
             'controller_name' => 'JourneeController',
             'list' => $list,
