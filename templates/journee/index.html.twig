@@ -3,7 +3,6 @@
 {% block title %}Hello JourneeController!{% endblock %}
 
 {% block body %}
-<h1>Titre</h1>
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -56,11 +55,16 @@
 </div>
 
 <div class="card text-center test">
-  <h1>Commentaire</h1>
+<div class="card-header">
+    <h4>Commentaire</h4>
+  </div>
+  
   {% if user %}
     {{ form_start(form) }}
         {# {{ form_row(form.contenu, { label: 'Message:', attr: { class: 'class1 class2' } }) }} #}
-        {{ form_row(form.contenu) }}
+        {{ form_row(form.contenu, {
+            label: false
+        }) }}
 
         <button type="submit" class="btn btn-primary">Poster</button>
     {{ form_end(form) }}
