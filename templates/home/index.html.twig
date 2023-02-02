@@ -21,7 +21,6 @@
         <a  class="btn btn-outline-primary my-2 my-sm-0" href="/login"> Connexion </a>
         <a class="btn btn-outline-primary my-2 my-sm-0" href="/register"> Crée un compte</a>
     {% endif %}
-
 </nav>
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
@@ -50,6 +49,7 @@
                 <div style='margin-left: auto;'> journée {{journee.niveau}} </div>
             </div>
             <p class="card-text">{{ journee.description}}</p>
+            <a href={{ path('journee', {'journee': journee.id}) }} class="btn btn-primary">Détails de la journée</a>
             {% if user %}
                 {% if in_list[journee.id] == 0 %}
                     {% if journee.niveau == 'Or' and user.ptscomp >= 30  %}
