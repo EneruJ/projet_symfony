@@ -65,7 +65,7 @@
         {{ form_row(form.contenu, {
             label: false
         }) }}
-        <button type="submit" class="btn btn-primary">Poster</button>
+        <button type="submit" class="btn btn-primary" style="margin-bottom:20px;">Poster</button>
     {{ form_end(form) }}
     {% endif %}
 
@@ -77,6 +77,28 @@
                         <div><h5 class="card-title"> {{ comment.user.nom }} {{ comment.user.prenom }}</h5> </div>
                     </div>
                     <div style=''> {{comment.contenu}} </div>
+                </div>
+            </div>
+{% endfor %}
+</div>
+<div class="card text-center test">
+<div class="card-header">
+    <h4>Images</h4>
+  </div>
+  {% if user and date() > journee.date %}
+    {{ form_start(form_image) }}
+        {# {{ form_row(form.contenu, { label: 'Message:', attr: { class: 'class1 class2' } }) }} #}
+        {{ form_row(form_image.url, {
+            label: "URL de l'image"
+        }) }}
+        <button type="submit" class="btn btn-primary" style="margin-bottom:20px;">Poster</button>
+    {{ form_end(form_image) }}
+    {% endif %}
+   
+{% for key, image in list_image %}
+            <div class="card w-100" >
+                <div class="card-body"> 
+                    <img src={{image.url}} width="600" height="400">
                 </div>
             </div>
 {% endfor %}

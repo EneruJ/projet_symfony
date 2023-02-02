@@ -41,9 +41,13 @@ class Journee
     #[ORM\JoinColumn(nullable: false)]
     private ?User $organisateur = null;
 
+    #[ORM\OneToMany(mappedBy: 'journee', targetEntity: Images::class)]
+    private Collection $images;
+
     public function __construct()
     {
         $this->userJournees = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,6 +165,36 @@ class Journee
     public function setOrganisateur(?User $organisateur): self
     {
         $this->organisateur = $organisateur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Images>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Images $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setJournee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getJournee() === $this) {
+                $image->setJournee(null);
+            }
+        }
 
         return $this;
     }

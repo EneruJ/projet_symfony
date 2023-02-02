@@ -6,10 +6,12 @@ use App\Entity\User;
 use App\Entity\Journee;
 use App\Entity\Commentaire;
 use App\Entity\UserJournee;
+use App\Entity\Images;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\AddJourneeType;
 use App\Form\CommentaireFormType;
+use App\Form\ImageFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +24,7 @@ class JourneeController extends AbstractController
         $user = $this->getUser();
         $list = $doctrine->getRepository(UserJournee::class)->findBy(array('journee' => $journee));
         $list_comment = $doctrine->getRepository(Commentaire::class)->findBy(array('journee' => $journee));
+        $list_image = $doctrine->getRepository(Images::class)->findBy(array('journee' => $journee));
 
         $Commentaire = new Commentaire();
         $CommentaireForm = $this->createForm(CommentaireFormType::class, $Commentaire);
@@ -35,6 +38,16 @@ class JourneeController extends AbstractController
             $em->flush();
         }
 
+        $image = new Images();
+        $imageForm = $this->createForm(ImageFormType::class, $image);
+        $imageForm->handleRequest($request);
+
+        if($imageForm->isSubmitted() && $imageForm->isValid()){
+            $image->setJournee($journee);
+            $em->persist($image);
+            $em->flush();
+        }
+
         return $this->render('journee/index.html.twig', [
             'controller_name' => 'JourneeController',
             'journee' => $journee,
@@ -42,6 +55,8 @@ class JourneeController extends AbstractController
             'list' => $list,
             'form' => $CommentaireForm->createView(),
             'list_comment' => $list_comment,
+            'form_image' => $imageForm->createView(),
+            'list_image' => $list_image,
         ]);
     }
 
