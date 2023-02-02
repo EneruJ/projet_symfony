@@ -19,9 +19,9 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Ajouter un produit ✅</h1>
+    <h1>Ajouter une journée ✅</h1>
     {{ form_start(journeeForm) }}
-    {{ form_row(journeeForm.titre) }}
+    {{ form_row(journeeForm.titre, { label : 'Titre :', attr : { 'placeholder': 'Saisir un titre' } }) }}
     {{ form_row(journeeForm.description) }}
     {{ form_row(journeeForm.date) }}
     {{ form_row(journeeForm.lieu) }}

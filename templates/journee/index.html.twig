@@ -59,6 +59,7 @@
   <h1>Commentaire</h1>
   {% if user %}
     {{ form_start(form) }}
+        {# {{ form_row(form.contenu, { label: 'Message:', attr: { class: 'class1 class2' } }) }} #}
         {{ form_row(form.contenu) }}
 
         <button type="submit" class="btn btn-primary">Poster</button>

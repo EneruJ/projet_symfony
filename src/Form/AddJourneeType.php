@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\Journee;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,8 +15,10 @@ class AddJourneeType extends AbstractType
     {
         $builder
             ->add('titre')
-            ->add('description')
-            ->add('date')
+            ->add('description', TextareaType::class)
+            ->add('date', DateType::class, [
+                'widget' => 'single_text',
+            ])
             ->add('lieu')
             ->add('nb_participants_max')
             ->add('niveau')
