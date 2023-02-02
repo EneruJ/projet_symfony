@@ -3,6 +3,7 @@
 {% block title %}Hello JourneeController!{% endblock %}
 
 {% block body %}
+<h1>Titre</h1>
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -52,5 +53,28 @@
     <p class="card-text">{{ participant.user.nom }} {{ participant.user.prenom }} ({{ participant.user.email }}) {% if journee.organisateur == user %} {% if participant.validation == false %}  <a href={{ path('validateuser', {'journee': journee.id, 'user': participant.user.id}) }}  class="btn btn-outline-success">Valider l'utilisateur</a> {% endif %} {% if participant.validation == true %} ✅ {% endif %} {% endif %}</p>
     {% endfor %}
   </div>
+</div>
+
+<div class="card text-center test">
+  <h1>Commentaire</h1>
+  {% if user %}
+    {{ form_start(form) }}
+        {{ form_row(form.contenu) }}
+
+        <button type="submit" class="btn btn-primary">Poster</button>
+    {{ form_end(form) }}
+    {% endif %}
+
+    
+{% for key, comment in list_comment %}
+            <div class="card w-100" >
+                <div class="card-body"> 
+                    <div class="row"> 
+                        <div><h5 class="card-title"> {{ comment.user.nom }} {{ comment.user.prenom }}</h5> </div>
+                    </div>
+                    <div style=''> {{comment.contenu}} </div>
+                </div>
+            </div>
+{% endfor %}
 </div>
 {% endblock %}

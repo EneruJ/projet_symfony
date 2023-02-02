@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Journee;
+use App\Entity\Commentaire;
 use App\Entity\UserJournee;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\AddJourneeType;
+use App\Form\CommentaireFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,21 +17,37 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class JourneeController extends AbstractController
 {
-    public function index(ManagerRegistry $doctrine, EntityManagerInterface $em, Journee $journee): Response
+    public function index(ManagerRegistry $doctrine, EntityManagerInterface $em, Journee $journee, Request $request): Response
     {
         $user = $this->getUser();
         $list = $doctrine->getRepository(UserJournee::class)->findBy(array('journee' => $journee));
+        $list_comment = $doctrine->getRepository(Commentaire::class)->findBy(array('journee' => $journee));
+
+        $Commentaire = new Commentaire();
+        $CommentaireForm = $this->createForm(CommentaireFormType::class, $Commentaire);
+        $CommentaireForm->handleRequest($request);
+
+        if($CommentaireForm->isSubmitted() && $CommentaireForm->isValid()){
+            $user = $this->getUser();
+            $Commentaire->setUser($user);
+            $Commentaire->setJournee($journee);
+            $em->persist($Commentaire);
+            $em->flush();
+        }
+
         return $this->render('journee/index.html.twig', [
             'controller_name' => 'JourneeController',
             'journee' => $journee,
             'user' => $user,
             'list' => $list,
+            'form' => $CommentaireForm->createView(),
+            'list_comment' => $list_comment,
         ]);
     }
 
     public function add(Request $request, EntityManagerInterface $em): Response
     {
-        {
+        
         $journeenew = new Journee();
 
         $journeeForm = $this->createForm(AddJourneeType::class, $journeenew);
@@ -49,7 +67,7 @@ class JourneeController extends AbstractController
         }
 
         return $this->renderForm('journee/add.html.twig', compact('journeeForm'));
-        }
+        
     }
 
     public function addParticipant(ManagerRegistry $doctrine, EntityManagerInterface $em, Journee $journee): Response{
@@ -76,10 +94,11 @@ class JourneeController extends AbstractController
         ]);
     }
 
-    public function validateUser(ManagerRegistry $doctrine, Journee $journee, User $user): Response{
+    public function validateUser(ManagerRegistry $doctrine,EntityManagerInterface $em,  Journee $journee, User $user): Response{
         $list = $doctrine->getRepository(UserJournee::class)->findOneBy(array('journee' => $journee, 'user' => $user));
         $journees = $doctrine->getRepository(Journee::class)->findAll();
         $list->setValidation(true);
+        $em->flush();
         $userp = $this->getUser();
         $liste = $doctrine->getRepository(UserJournee::class)->findBy(array('journee' => $journee));
         return $this->render('journee/index.html.twig', [
@@ -89,4 +108,5 @@ class JourneeController extends AbstractController
             'list' => $liste,
         ]);
     }
+
 }
