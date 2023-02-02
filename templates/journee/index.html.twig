@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello JourneeController!{% endblock %}
+{% block title %}{{journee.titre}}{% endblock %}
 
 {% block body %}
 <style>
@@ -56,16 +56,15 @@
 
 <div class="card text-center test">
 <div class="card-header">
-    <h4>Commentaire</h4>
+    <h4>Commentaires</h4>
   </div>
   
-  {% if user %}
+  {% if user and date() > journee.date %}
     {{ form_start(form) }}
         {# {{ form_row(form.contenu, { label: 'Message:', attr: { class: 'class1 class2' } }) }} #}
         {{ form_row(form.contenu, {
             label: false
         }) }}
-
         <button type="submit" class="btn btn-primary">Poster</button>
     {{ form_end(form) }}
     {% endif %}
@@ -82,4 +81,5 @@
             </div>
 {% endfor %}
 </div>
+<p align=center><iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d25509988.46470467!2d21.80804261364636!3d38.69456256502908!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x47e613255e3df3cf%3A0xea07f5a4ea6bd218!2sMairie%20de%20Bondy%2C%20Esplanade%20Claude%20Fuzier%2C%20Bondy!3m2!1d48.901689999999995!2d2.4810689999999997!4m5!1s0x390cfd5b347eb62d%3A0x52c2b7494e204dce!2sNew%20Dehli%2C%20Delhi%2C%20Inde!3m2!1d28.6139391!2d77.2090212!5e0!3m2!1sfr!2sfr!4v1675343518949!5m2!1sfr!2sfr" width="800" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
 {% endblock %}

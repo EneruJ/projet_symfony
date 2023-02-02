@@ -26,23 +26,18 @@
     {% endif %}
 </nav>
 
-{% if user %}
-    <ul>
-        {{ user.ptscomp }}
-        {{ user.niveau}}
-    </ul>
-{% endif %}
 <h1 align=center>Accueil</h1>
 <div class="col-sm-12">
 {% for key, journee in list %}
     <div class="card w-50" >
         <div class="card-body"> 
             <div class="row"> 
-                <div><h5 class="card-title"> {{ journee.titre }} </h5> </div>
-                <div style='margin-left: auto;'> journée {{journee.niveau}} </div>
+                <div style="margin-left: 15px;"><h5 class="card-title" > {{ journee.titre }} </h5> </div>
+                <div style='margin-left: auto;'> journée de niveau {{journee.niveau}} </div>
             </div>
             <p class="card-text">{{ journee.description}}</p>
-            <a href={{ path('journee', {'journee': journee.id}) }} class="btn btn-primary">Détails de la journée</a>
+            <p class="card-text">Nombre de personnes max : {{ journee.nbparticipantsmax}}</p>
+            <a href={{ path('journee', {'journee': journee.id}) }} class="btn btn-primary">Détails</a>
             {% if user %}
                 {% if in_list[journee.id] == 0 %}
                     {% if journee.niveau == 'Or' and user.ptscomp >= 30  %}

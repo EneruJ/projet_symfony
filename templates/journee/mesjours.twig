@@ -14,17 +14,17 @@
         <div style='margin-left: auto;'> 
             <a  class="btn btn-outline-primary my-2 my-sm-0"  style='margin-left: auto;' href="/mesjours"> Mes journées </a>
             {% if user.ptscomp >= 30 %}
-                <a class="btn btn-outline-success my-2 my-sm-0" href={{ path('add_journee')}} style='margin-left: auto;' >Crée une journée</a>
+                <a class="btn btn-outline-success my-2 my-sm-0" href={{ path('add_journee')}} style='margin-left: auto;' >Créer une journée</a>
             {% endif %}
         </div>
     {% endif %}
     {% if user == false %}
         <a  class="btn btn-outline-primary my-2 my-sm-0" href="/login"> Connexion </a>
-        <a class="btn btn-outline-primary my-2 my-sm-0" href="/register"> Crée un compte</a>
+        <a class="btn btn-outline-primary my-2 my-sm-0" href="/register"> Créer un compte</a>
     {% endif %}
 
 </nav>
-<h1>Liste de mes participations</h1>
+<h1 align=center>Liste de mes journées</h1>
 
 
 <div class="col-sm-12">
