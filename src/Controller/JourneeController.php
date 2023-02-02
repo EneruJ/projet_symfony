@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Journee;
 use App\Entity\UserJournee;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,7 +18,7 @@ class JourneeController extends AbstractController
     public function index(ManagerRegistry $doctrine, EntityManagerInterface $em, Journee $journee): Response
     {
         $user = $this->getUser();
-        $list = $doctrine->getRepository(UserJournee::class)->findOneBy(array('journee' => $journee));
+        $list = $doctrine->getRepository(UserJournee::class)->findBy(array('journee' => $journee));
         return $this->render('journee/index.html.twig', [
             'controller_name' => 'JourneeController',
             'journee' => $journee,
@@ -29,20 +30,20 @@ class JourneeController extends AbstractController
     public function add(Request $request, EntityManagerInterface $em): Response
     {
         {
-        $journee = new Journee();
+        $journeenew = new Journee();
 
-        $journeeForm = $this->createForm(AddJourneeType::class, $journee);
+        $journeeForm = $this->createForm(AddJourneeType::class, $journeenew);
 
         $journeeForm->handleRequest($request);
 
         if($journeeForm->isSubmitted() && $journeeForm->isValid()){
             $user = $this->getUser();
-            $journee->setOrganisateur($user);
+            $journeenew->setOrganisateur($user);
             $liste = new UserJournee();
-            $liste->setJournee($journee);
-            $liste->setValidation(false);
+            $liste->setJournee($journeenew);
+            $liste->setValidation(true);
             $liste->setUser($user);
-            $em->persist($journee);
+            $em->persist($journeenew);
             $em->persist($liste);
             $em->flush();
         }
@@ -72,6 +73,20 @@ class JourneeController extends AbstractController
         return $this->render('journee/index.html.twig', [
             'controller_name' => 'JourneeController',
             'list' => $list,
+        ]);
+    }
+
+    public function validateUser(ManagerRegistry $doctrine, Journee $journee, User $user): Response{
+        $list = $doctrine->getRepository(UserJournee::class)->findOneBy(array('journee' => $journee, 'user' => $user));
+        $journees = $doctrine->getRepository(Journee::class)->findAll();
+        $list->setValidation(true);
+        $userp = $this->getUser();
+        $liste = $doctrine->getRepository(UserJournee::class)->findBy(array('journee' => $journee));
+        return $this->render('journee/index.html.twig', [
+            'controller_name' => 'JourneeController',
+            'journee' => $journee,
+            'user' => $userp,
+            'list' => $liste,
         ]);
     }
 }

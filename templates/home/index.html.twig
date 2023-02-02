@@ -16,7 +16,7 @@
         <div style='margin-left: auto;'> 
             <a  class="btn btn-outline-primary my-2 my-sm-0"  style='margin-left: auto;' href="/mesjours"> Mes journées </a>
             {% if user.ptscomp >= 30 %}
-                <a class="btn btn-outline-success my-2 my-sm-0" href="/journee/add" style='margin-left: auto;' >Crée une journée</a>
+                <a class="btn btn-outline-success my-2 my-sm-0" href={{ path('add_journee')}} style='margin-left: auto;' >Créer une journée</a>
             {% endif %}
         </div>
     {% endif %}
