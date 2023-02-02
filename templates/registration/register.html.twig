@@ -3,6 +3,12 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+    <nav class="navbar navbar-dark bg-dark" style='justify-content:flex-start;'>
+            <a  class="btn btn-outline-light my-2 my-sm-0" href="/"> Home </a>
+            <a  class="btn btn-outline-primary my-2 my-sm-0" href="/login"> Connexion </a>
+            <a class="btn btn-outline-primary my-2 my-sm-0" href="/register"> Crée un compte</a>
+    </nav>
+
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}

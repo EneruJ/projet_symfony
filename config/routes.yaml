@@ -29,3 +29,7 @@ add_participant:
 logout:
   path: /logout
   controller: App\Controller\SecurityController::logout
+
+mesjours:
+  path: /mesjours
+  controller: App\Controller\HomeController::mesjours

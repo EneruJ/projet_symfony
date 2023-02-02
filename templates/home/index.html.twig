@@ -10,12 +10,15 @@
 <nav class="navbar navbar-dark bg-dark" style='justify-content:flex-start;'>
   <!-- Navbar content -->
     {% if user %}
+        <a  class="btn btn-outline-light my-2 my-sm-0" href="/"> Home </a>
         <a  class="btn btn-outline-warning my-2 my-sm-0" href="/logout"> Déconnexion </a>
-        <a  class="btn btn-outline-primary my-2 my-sm-0"  style='margin-left: 10px;' href="/login"> Mes journée </a>
-        <p style='color:white;margin-left: 10px;'> Bonjour {{user.nom}} {{user.prenom}} ! </p> 
-        {% if user.ptscomp >= 30 %}
-            <a class="btn btn-outline-success my-2 my-sm-0" href="/journee/add" style='margin-left: auto;' >Crée une journée</a>
-        {% endif %}
+        <p style='color:white;margin-left: 10px;'> Bonjour {{user.nom}} {{user.prenom}} ! </p>
+        <div style='margin-left: auto;'> 
+            <a  class="btn btn-outline-primary my-2 my-sm-0"  style='margin-left: auto;' href="/mesjours"> Mes journées </a>
+            {% if user.ptscomp >= 30 %}
+                <a class="btn btn-outline-success my-2 my-sm-0" href="/journee/add" style='margin-left: auto;' >Crée une journée</a>
+            {% endif %}
+        </div>
     {% endif %}
     {% if user == false %}
         <a  class="btn btn-outline-primary my-2 my-sm-0" href="/login"> Connexion </a>
@@ -23,16 +26,6 @@
     {% endif %}
 
 </nav>
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'E:/H3 Hitema/Symfony/projet_synf/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'E:/H3 Hitema/Symfony/projet_synf/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
 
 {% if user %}
     <ul>
@@ -42,7 +35,6 @@
 {% endif %}
 <div class="col-sm-12">
 {% for key, journee in list %}
-{{key}}
     <div class="card w-50" >
         <div class="card-body"> 
             <div class="row"> 

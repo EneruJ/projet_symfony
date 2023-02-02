@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+
+
+<nav class="navbar navbar-dark bg-dark" style='justify-content:flex-start;'>
+  <!-- Navbar content -->
+    {% if user %}
+        <a  class="btn btn-outline-light my-2 my-sm-0" href="/"> Home </a>
+        <a  class="btn btn-outline-warning my-2 my-sm-0" href="/logout"> Déconnexion </a>
+        <p style='color:white;margin-left: 10px;'> Bonjour {{user.nom}} {{user.prenom}} ! </p> 
+        <div style='margin-left: auto;'> 
+            <a  class="btn btn-outline-primary my-2 my-sm-0"  style='margin-left: auto;' href="/mesjours"> Mes journées </a>
+            {% if user.ptscomp >= 30 %}
+                <a class="btn btn-outline-success my-2 my-sm-0" href="/journee/add" style='margin-left: auto;' >Crée une journée</a>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if user == false %}
+        <a  class="btn btn-outline-primary my-2 my-sm-0" href="/login"> Connexion </a>
+        <a class="btn btn-outline-primary my-2 my-sm-0" href="/register"> Crée un compte</a>
+    {% endif %}
+
+</nav>
+<h1>Liste de mes participations</h1>
+
+
+<div class="col-sm-12">
+{% for key, journee in list %}
+    {% if user %}
+        {% if in_list[journee.id] == 1 %}
+            <div class="card w-50" >
+                <div class="card-body"> 
+                    <div class="row"> 
+                        <div><h5 class="card-title"> {{ journee.titre }} </h5> </div>
+                        <div style='margin-left: auto;'> journée {{journee.niveau}} </div>
+                    </div>
+                    <p class="card-text">{{ journee.description}}</p>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+</div>
+
+{% endblock %}
