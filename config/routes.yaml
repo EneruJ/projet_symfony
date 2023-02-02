@@ -19,12 +19,16 @@ journee:
   controller: App\Controller\JourneeController::index
 
 add_journee:
-  path: /journee/add
+  path: /newjournee
   controller: App\Controller\JourneeController::add
 
 add_participant:
   path: /journee/add/participant/{journee}
   controller: App\Controller\JourneeController::addParticipant
+
+validateuser:
+  path: /journee/validation/{journee}/{user}
+  controller: App\Controller\JourneeController::validateUser
 
 logout:
   path: /logout

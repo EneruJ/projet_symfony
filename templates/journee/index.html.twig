@@ -11,16 +11,19 @@
 <nav class="navbar navbar-dark bg-dark" style='justify-content:flex-start;'>
   <!-- Navbar content -->
     {% if user %}
+        <a  class="btn btn-outline-light my-2 my-sm-0" href="/"> Home </a>
         <a  class="btn btn-outline-warning my-2 my-sm-0" href="/logout"> Déconnexion </a>
-        <a  class="btn btn-outline-primary my-2 my-sm-0"  style='margin-left: 10px;' href="/login"> Mes journée </a>
-        <p style='color:white;margin-left: 10px;'> Bonjour {{user.nom}} {{user.prenom}} ! </p> 
-        {% if user.ptscomp >= 30 %}
-            <a class="btn btn-outline-success my-2 my-sm-0" href="/journee/add" style='margin-left: auto;' >Crée une journée</a>
-        {% endif %}
+        <p style='color:white;margin-left: 10px;margin-top: 15px'> Bonjour {{user.prenom}} ! </p>
+        <div style='margin-left: auto;'> 
+            <a  class="btn btn-outline-primary my-2 my-sm-0"  style='margin-left: auto;' href="/mesjours">Mes journées</a>
+            {% if user.ptscomp >= 30 %}
+                <a class="btn btn-outline-success my-2 my-sm-0" href={{ path('add_journee')}} style='margin-left: auto;' >Créer une journée</a>
+            {% endif %}
+        </div>
     {% endif %}
     {% if user == false %}
-        <a  class="btn btn-outline-primary my-2 my-sm-0" href="/login"> Connexion </a>
-        <a class="btn btn-outline-primary my-2 my-sm-0" href="/register"> Crée un compte</a>
+        <a  class="btn btn-outline-primary my-2 my-sm-0" href="/login">Connexion </a>
+        <a class="btn btn-outline-primary my-2 my-sm-0" href="/register">Créer un compte</a>
     {% endif %}
 </nav>
 <div class="example-wrapper text-center">
@@ -35,11 +38,19 @@
     <h5 class="card-title">Journée réservée au niveau {{journee.niveau}} ou plus</h5>
     <p class="card-text">{{ journee.description }}</p>
     <p class="card-text">Nombre maximum de participants : {{ journee.nbparticipantsmax }}</p>
-    <p class="card-text">Liste des participants</p>
-    <p class="card-text">{{ list.user.nom }} {{ list.user.prenom }} {% if journee.organisateur == user %} <input type="checkbox" name="b" id="b"> {% endif %}</p>
   </div>
   <div class="card-footer text-muted">
     {{ journee.date|date('d-m-Y') }} à {{ journee.date|date('H:i:s') }}
+  </div>
+</div>
+<div class="card text-center test">
+  <div class="card-header">
+    <h4>Liste des participants</h4>
+  </div> 
+  <div class="card-body">
+    {% for key, participant in list %}
+    <p class="card-text">{{ participant.user.nom }} {{ participant.user.prenom }} ({{ participant.user.email }}) {% if journee.organisateur == user %} {% if participant.validation == false %}  <a href={{ path('validateuser', {'journee': journee.id, 'user': participant.user.id}) }}  class="btn btn-outline-success">Valider l'utilisateur</a> {% endif %} {% if participant.validation == true %} ✅ {% endif %} {% endif %}</p>
+    {% endfor %}
   </div>
 </div>
 {% endblock %}
