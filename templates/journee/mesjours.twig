@@ -38,6 +38,7 @@
                         <div style='margin-left: auto;'> journée {{journee.niveau}} </div>
                     </div>
                     <p class="card-text">{{ journee.description}}</p>
+                    <a href={{ path('journee', {'journee': journee.id}) }} class="btn btn-primary">Détails de la journée</a>
                 </div>
             </div>
         {% endif %}
