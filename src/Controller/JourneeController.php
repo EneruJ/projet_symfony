@@ -14,10 +14,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class JourneeController extends AbstractController
 {
-    public function index(): Response
+    public function index(ManagerRegistry $doctrine, EntityManagerInterface $em, Journee $journee): Response
     {
+        $user = $this->getUser();
+        $list = $doctrine->getRepository(UserJournee::class)->findOneBy(array('journee' => $journee));
         return $this->render('journee/index.html.twig', [
             'controller_name' => 'JourneeController',
+            'journee' => $journee,
+            'user' => $user,
+            'list' => $list,
         ]);
     }
 
@@ -33,7 +38,6 @@ class JourneeController extends AbstractController
         if($journeeForm->isSubmitted() && $journeeForm->isValid()){
             $user = $this->getUser();
             $journee->setOrganisateur($user);
-
             $liste = new UserJournee();
             $liste->setJournee($journee);
             $liste->setValidation(false);
@@ -49,12 +53,16 @@ class JourneeController extends AbstractController
 
     public function addParticipant(ManagerRegistry $doctrine, EntityManagerInterface $em, Journee $journee): Response{
         $user = $this->getUser();
-        $list = $doctrine->getRepository(UserJournee::class)->findOneBy(array('journee' => $journee));
+        $list = new UserJournee();
+        $list->setJournee($journee);
+        $list->setValidation(false);
         $list->setUser($user);
+        $em->persist($list);
         $em->flush();
-        return $this->render('/', [
+        return $this->render('home/index.html.twig', [
             'controller_name' => 'JourneeController',
             'list' => $list,
+            'user' => $user,
         ]);
     }
 

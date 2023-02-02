@@ -6,23 +6,40 @@
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .test {margin: 1em auto; max-width: 800px;}
 </style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'E:/H3 Hitema/Symfony/projet_synf/src/Controller/JourneeController.php'|file_link(0) }}">src/Controller/JourneeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'E:/H3 Hitema/Symfony/projet_synf/templates/journee/index.html.twig'|file_link(0) }}">templates/journee/index.html.twig</a></code></li>
-    </ul>
+<nav class="navbar navbar-dark bg-dark" style='justify-content:flex-start;'>
+  <!-- Navbar content -->
+    {% if user %}
+        <a  class="btn btn-outline-warning my-2 my-sm-0" href="/logout"> Déconnexion </a>
+        <a  class="btn btn-outline-primary my-2 my-sm-0"  style='margin-left: 10px;' href="/login"> Mes journée </a>
+        <p style='color:white;margin-left: 10px;'> Bonjour {{user.nom}} {{user.prenom}} ! </p> 
+        {% if user.ptscomp >= 30 %}
+            <a class="btn btn-outline-success my-2 my-sm-0" href="/journee/add" style='margin-left: auto;' >Crée une journée</a>
+        {% endif %}
+    {% endif %}
+    {% if user == false %}
+        <a  class="btn btn-outline-primary my-2 my-sm-0" href="/login"> Connexion </a>
+        <a class="btn btn-outline-primary my-2 my-sm-0" href="/register"> Crée un compte</a>
+    {% endif %}
+</nav>
+<div class="example-wrapper text-center">
+    <h1>Détails de la journée</h1>
 </div>
 
-{% for participant in list %}
-    <div class="card w-50" >
-        <div class="card-body"> 
-            <p class="card-text">{{ participant.id}}</p>
-        </div>
-    </div>
-{% endfor %}
+<div class="card text-center test">
+  <div class="card-header">
+    <h3>{{ journee.titre }}</h3>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Journée réservée au niveau {{journee.niveau}} ou plus</h5>
+    <p class="card-text">{{ journee.description }}</p>
+    <p class="card-text">Nombre maximum de participants : {{ journee.nbparticipantsmax }}</p>
+    <p class="card-text">Liste des participants</p>
+    <p class="card-text">{{ list.user.nom }} {{ list.user.prenom }} {% if journee.organisateur == user %} <input type="checkbox" name="b" id="b"> {% endif %}</p>
+  </div>
+  <div class="card-footer text-muted">
+    {{ journee.date|date('d-m-Y') }} à {{ journee.date|date('H:i:s') }}
+  </div>
+</div>
 {% endblock %}

@@ -15,7 +15,7 @@ login:
   controller: App\Controller\SecurityController::login
 
 journee:
-  path: /journee
+  path: /journee/{journee}
   controller: App\Controller\JourneeController::index
 
 add_journee:
